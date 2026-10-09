@@ -40,7 +40,7 @@ export interface PrescriptionScanResult {
 }
 
 const LANGUAGE_LABELS: Record<SupportedScanLang, string> = {
-  en: "English",
+  en: "English (with Hindi, Kannada, Tamil & Telugu tablet names)",
   hi: "Hindi (हिन्दी - Devanagari script)",
   kn: "Kannada (ಕನ್ನಡ - Kannada script)",
   ta: "Tamil (தமிழ் - Tamil script)",
@@ -50,7 +50,7 @@ const LANGUAGE_LABELS: Record<SupportedScanLang, string> = {
 export const DEMO_SCANNED_MEDICINES: ScannedMedicineItem[] = [
   {
     name: "Metformin Hydrochloride (Glycomet)",
-    localizedName: "Metformin Hydrochloride (Glycomet)",
+    localizedName: "मेटफॉर्मिन (ग्लाइकोमेट) / ಮೆಟ್‌ಫಾರ್ಮಿನ್ / மெட்ஃபார்மின் / మెట్‌ఫార్మిన్",
     strength: "500 mg",
     form: "tablet",
     doseAmount: 1,
@@ -64,7 +64,7 @@ export const DEMO_SCANNED_MEDICINES: ScannedMedicineItem[] = [
   },
   {
     name: "Amlodipine Besylate (Stamlo)",
-    localizedName: "Amlodipine Besylate (Stamlo)",
+    localizedName: "एम्लोडिपिन (स्टैमलो) / ಅಮ್ಲೋಡಿಪಿನ್ / அம்லோடிபின் / అమ్లోడిపిన్",
     strength: "5 mg",
     form: "tablet",
     doseAmount: 1,
@@ -78,7 +78,7 @@ export const DEMO_SCANNED_MEDICINES: ScannedMedicineItem[] = [
   },
   {
     name: "Ambroxol Pediatric Cough Syrup",
-    localizedName: "Ambroxol Pediatric Cough Syrup",
+    localizedName: "एम्ब्रॉक्सोल सिरप / ಆಂಬ್ರೊಕ್ಸಾಲ್ ಸಿರಪ್ / அம்புரோக்சால் சிரப் / ఆంబ్రోక్సాల్ సిరప్",
     strength: "15 mg / 5 ml",
     form: "syrup",
     doseAmount: 5,
@@ -107,22 +107,32 @@ export const DEMO_LOCALIZED_DATA: Record<
 > = {
   en: {
     translatedText:
-      "Dr. A. K. Rao Clinic — Prescription:\n1) Tablet Glycomet (Metformin Hydrochloride) 500 mg — Take 1 tablet in the Morning and 1 tablet at Night after meals for 30 days.\n2) Tablet Stamlo (Amlodipine) 5 mg — Take 1 tablet in the Morning after breakfast for 30 days.\n3) Syrup Ambroxol 15 mg / 5 ml — Take 5 ml (1 teaspoon) twice daily in the Morning and at Night after food for 5 days.\n[Note: Handwritten remark at the bottom right corner is smudged and unclear.]",
+      "Dr. A. K. Rao Clinic — Prescription (Translated with Vernacular Tablet Names):\n" +
+      "1) Tablet Glycomet (Metformin 500 mg) — [हिन्दी: मेटफॉर्मिन की गोली | ಕನ್ನಡ: ಮೆಟ್‌ಫಾರ್ಮಿನ್ ಮಾತ್ರೆ | தமிழ்: மெட்ஃபார்மின் மாத்திரை | తెలుగు: మెట్‌ఫార్మిన్ మాత్ర]\n" +
+      "   → Take 1 tablet in the Morning and 1 tablet at Night after meals for 30 days.\n" +
+      "2) Tablet Stamlo (Amlodipine 5 mg) — [हिन्दी: एम्लोडिपिन की गोली | ಕನ್ನಡ: ಅಮ್ಲೋಡಿಪಿನ್ ಮಾತ್ರೆ | தமிழ்: அம்லோடிபின் மாத்திரை | తెలుగు: అమ్లోడిపిన్ మాత్ర]\n" +
+      "   → Take 1 tablet in the Morning after breakfast for 30 days.\n" +
+      "3) Syrup Ambroxol (15 mg / 5 ml) — [हिन्दी: एम्ब्रॉक्सोल खांसी का सिरप | ಕನ್ನಡ: ಆಂಬ್ರೊಕ್ಸಾಲ್ ಕೆಮ್ಮಿನ ಸಿರಪ್ | தமிழ்: அம்புரோக்சால் இருமல் சிரப் | తెలుగు: ఆంబ్రోక్సాల్ దగ్గు సిరప్]\n" +
+      "   → Take 5 ml (1 teaspoon) twice daily in the Morning and at Night after food for 5 days.\n" +
+      "[Explicit Safety Flag: Handwritten remark at the bottom right corner is smudged and unclear.]",
     medicines: [
       {
-        localizedName: "Metformin Hydrochloride (Glycomet) 500 mg Tablet",
+        localizedName:
+          "Metformin (Glycomet) 500 mg Tablet — मेटफॉर्मिन की गोली / ಮೆಟ್‌ಫಾರ್ಮಿನ್ ಮಾತ್ರೆ / மெட்ஃபார்மின் மாத்திரை / మెట్‌ఫార్మిన్ మాత్ర",
         dosage: "1 Tablet (500 mg) per dose",
         timing:
           "Take twice daily — 1 tablet in the Morning after breakfast and 1 tablet at Night after dinner for 30 days.",
       },
       {
-        localizedName: "Amlodipine Besylate (Stamlo) 5 mg Tablet",
+        localizedName:
+          "Amlodipine (Stamlo) 5 mg Tablet — एम्लोडिपिन की गोली / ಅಮ್ಲೋಡಿಪಿನ್ ಮಾತ್ರೆ / அம்லோடிபின் மாத்திரை / అమ్లోడిపిన్ మాత్ర",
         dosage: "1 Tablet (5 mg) per dose",
         timing:
           "Take once daily — 1 tablet in the Morning after breakfast for 30 days.",
       },
       {
-        localizedName: "Ambroxol Pediatric Cough Syrup (15 mg / 5 ml)",
+        localizedName:
+          "Ambroxol Cough Syrup (15 mg / 5 ml) — एम्ब्रॉक्सोल सिरप / ಆಂಬ್ರೊಕ್ಸಾಲ್ ಸಿರಪ್ / அம்புரோக்சால் சிரப் / ఆంబ్రోక్సాల్ సిరప్",
         dosage: "5 ml (1 measuring spoon) per dose",
         timing:
           "Take twice daily — 5 ml in the Morning and 5 ml at Night after food for 5 days.",
@@ -137,7 +147,11 @@ export const DEMO_LOCALIZED_DATA: Record<
   },
   hi: {
     translatedText:
-      "डॉ. ए. के. राव क्लिनिक — पर्ची का हिंदी अनुवाद:\n1) गोली ग्लाइकोमेट (मेटफॉर्मिन हाइड्रोक्लोराइड / Metformin) 500 मि.ग्रा. — सुबह और रात भोजन के बाद 1-1 गोली, 30 दिनों तक।\n2) गोली स्टैमलो (एम्लोडिपिन / Amlodipine) 5 मि.ग्रा. — सुबह नाश्ते के बाद 1 गोली, 30 दिनों तक।\n3) सिरप एम्ब्रॉक्सोल (Ambroxol खांसी की दवा) 15 मि.ग्रा./5 मि.ली. — सुबह और रात भोजन के बाद 5 मि.ली. (1 चम्मच), 5 दिनों तक।\n[नोट: नीचे दाईं ओर लिखा गया हाथ का नोट धुंधला और अस्पष्ट है।]",
+      "डॉ. ए. के. राव क्लिनिक — पर्ची का हिंदी अनुवाद (दवाइयों के नाम हिंदी में):\n" +
+      "1) मेटफॉर्मिन (ग्लाइकोमेट / Glycomet) 500 मि.ग्रा. की गोली — सुबह और रात भोजन के बाद 1-1 गोली, 30 दिनों तक।\n" +
+      "2) एम्लोडिपिन (स्टैमलो / Stamlo) 5 मि.ग्रा. की गोली — सुबह नाश्ते के बाद 1 गोली, 30 दिनों तक।\n" +
+      "3) एम्ब्रॉक्सोल (Ambroxol) खांसी का सिरप 15 मि.ग्रा./5 मि.ली. — सुबह और रात भोजन के बाद 5 मि.ली. (1 चम्मच), 5 दिनों तक।\n" +
+      "[स्पष्ट सुरक्षा चेतावनी: नीचे दाईं ओर लिखा गया हाथ का नोट धुंधला और अस्पष्ट है।]",
     medicines: [
       {
         localizedName: "मेटफॉर्मिन (ग्लाइकोमेट) 500 मि.ग्रा. की गोली",
@@ -166,7 +180,11 @@ export const DEMO_LOCALIZED_DATA: Record<
   },
   kn: {
     translatedText:
-      "ಡಾ. ಎ. ಕೆ. ರಾವ್ ಕ್ಲಿನಿಕ್ — ಕನ್ನಡ ಅನುವಾದ:\n1) ಗ್ಲೈಕೊಮೆಟ್ ಮಾತ್ರೆ (ಮೆಟ್‌ಫಾರ್ಮಿನ್ / Metformin) 500 ಮಿ.ಗ್ರಾಂ — ಬೆಳಿಗ್ಗೆ ಮತ್ತು ರಾತ್ರಿ ಊಟದ ನಂತರ 1 ಮಾತ್ರೆ, 30 ದಿನಗಳವರೆಗೆ.\n2) ಸ್ಟಾಮ್ಲೊ ಮಾತ್ರೆ (ಅಮ್ಲೋಡಿಪಿನ್ / Amlodipine) 5 ಮಿ.ಗ್ರಾಂ — ಬೆಳಿಗ್ಗೆ ಉಪಾಹಾರದ ನಂತರ 1 ಮಾತ್ರೆ, 30 ದಿನಗಳವರೆಗೆ.\n3) ಆಂಬ್ರೊಕ್ಸಾಲ್ ಕೆಮ್ಮಿನ ಸಿರಪ್ (Ambroxol Syrup) 15 ಮಿ.ಗ್ರಾಂ/5 ಮಿ.ಲೀ — ಬೆಳಿಗ್ಗೆ ಮತ್ತು ರಾತ್ರಿ ಊಟದ ನಂತರ 5 ಮಿ.ಲೀ (1 ಚಮಚ), 5 ದಿನಗಳವರೆಗೆ.\n[ಗಮನಿಸಿ: ಕೆಳಗಿನ ಬಲ ಮೂಲೆಯಲ್ಲಿ ಕೈಬರಹದ ಟಿಪ್ಪಣಿ ಮಂದವಾಗಿದ್ದು ಓದಲು ಅಸ್ಪಷ್ಟವಾಗಿದೆ.]",
+      "ಡಾ. ಎ. ಕೆ. ರಾವ್ ಕ್ಲಿನಿಕ್ — ಕನ್ನಡ ಅನುವಾದ (ಮಾತ್ರೆಗಳ ಹೆಸರು ಕನ್ನಡದಲ್ಲಿ):\n" +
+      "1) ಮೆಟ್‌ಫಾರ್ಮಿನ್ (ಗ್ಲೈಕೊಮೆಟ್ / Glycomet) 500 ಮಿ.ಗ್ರಾಂ ಮಾತ್ರೆ — ಬೆಳಿಗ್ಗೆ ಮತ್ತು ರಾತ್ರಿ ಊಟದ ನಂತರ 1 ಮಾತ್ರೆ, 30 ದಿನಗಳವರೆಗೆ.\n" +
+      "2) ಅಮ್ಲೋಡಿಪಿನ್ (ಸ್ಟಾಮ್ಲೊ / Stamlo) 5 ಮಿ.ಗ್ರಾಂ ಮಾತ್ರೆ — ಬೆಳಿಗ್ಗೆ ಉಪಾಹಾರದ ನಂತರ 1 ಮಾತ್ರೆ, 30 ದಿನಗಳವರೆಗೆ.\n" +
+      "3) ಆಂಬ್ರೊಕ್ಸಾಲ್ ಕೆಮ್ಮಿನ ಸಿರಪ್ (Ambroxol Syrup) 15 ಮಿ.ಗ್ರಾಂ/5 ಮಿ.ಲೀ — ಬೆಳಿಗ್ಗೆ ಮತ್ತು ರಾತ್ರಿ ಊಟದ ನಂತರ 5 ಮಿ.ಲೀ (1 ಚಮಚ), 5 ದಿನಗಳವರೆಗೆ.\n" +
+      "[ಸುರಕ್ಷತಾ ಎಚ್ಚರಿಕೆ: ಕೆಳಗಿನ ಬಲ ಮೂಲೆಯಲ್ಲಿ ಕೈಬರಹದ ಟಿಪ್ಪಣಿ ಮಂದವಾಗಿದ್ದು ಓದಲು ಅಸ್ಪಷ್ಟವಾಗಿದೆ.]",
     medicines: [
       {
         localizedName: "ಮೆಟ್‌ಫಾರ್ಮಿನ್ (ಗ್ಲೈಕೊಮೆಟ್) 500 ಮಿ.ಗ್ರಾಂ ಮಾತ್ರೆ",
@@ -196,7 +214,11 @@ export const DEMO_LOCALIZED_DATA: Record<
   },
   ta: {
     translatedText:
-      "டாக்டர் ஏ. கே. ராவ் கிளினிக் — தமிழ் மொழிபெயர்ப்பு:\n1) கிளைகோமெட் மாத்திரை (மெட்ஃபார்மின் / Metformin) 500 மி.கி — காலை மற்றும் இரவு உணவுக்குப் பிறகு 1 மாத்திரை, 30 நாட்களுக்கு.\n2) ஸ்டாம்லோ மாத்திரை (அம்லோடிபின் / Amlodipine) 5 மி.கி — காலை உணவுக்குப் பிறகு 1 மாத்திரை, 30 நாட்களுக்கு.\n3) அம்புரோக்சால் இருமல் மருந்து (Ambroxol Syrup) 15 மி.கி/5 மி.லி — காலை மற்றும் இரவு உணவுக்குப் பிறகு 5 மி.லி (1 ஸ்பூன்), 5 நாட்களுக்கு.\n[குறிப்பு: கீழ் வலது மூலையில் உள்ள கையெழுத்து மங்கலாகவும் தெளிவற்றதாகவும் உள்ளது.]",
+      "டாக்டர் ஏ. கே. ராவ் கிளினிக் — தமிழ் மொழிபெயர்ப்பு (மாத்திரைகளின் பெயர்கள் தமிழில்):\n" +
+      "1) மெட்ஃபார்மின் (கிளைகோமெட் / Glycomet) 500 மி.கி மாத்திரை — காலை மற்றும் இரவு உணவுக்குப் பிறகு 1 மாத்திரை, 30 நாட்களுக்கு.\n" +
+      "2) அம்லோடிபின் (ஸ்டாம்லோ / Stamlo) 5 மி.கி மாத்திரை — காலை உணவுக்குப் பிறகு 1 மாத்திரை, 30 நாட்களுக்கு.\n" +
+      "3) அம்புரோக்சால் இருமல் சிரப் (Ambroxol Syrup) 15 மி.கி/5 மி.லி — காலை மற்றும் இரவு உணவுக்குப் பிறகு 5 மி.லி (1 ஸ்பூன்), 5 நாட்களுக்கு.\n" +
+      "[பாதுகாப்பு எச்சரிக்கை: கீழ் வலது மூலையில் உள்ள கையெழுத்து மங்கலாகவும் தெளிவற்றதாகவும் உள்ளது.]",
     medicines: [
       {
         localizedName: "மெட்ஃபார்மின் (கிளைகோமெட்) 500 மி.கி மாத்திரை",
@@ -226,7 +248,11 @@ export const DEMO_LOCALIZED_DATA: Record<
   },
   te: {
     translatedText:
-      "డా. ఏ. కే. రావు క్లినిక్ — తెలుగు అనువాదం:\n1) గ్లైకోమెట్ మాత్ర (మెట్‌ఫార్మిన్ / Metformin) 500 మి.గ్రా — ఉదయం మరియు రాత్రి భోజనం తర్వాత 1 మాత్ర, 30 రోజుల పాటు.\n2) స్టామ్లో మాత్ర (అమ్లోడిపిన్ / Amlodipine) 5 మి.గ్రా — ఉదయం అల్పాహారం తర్వాత 1 మాత్ర, 30 రోజుల పాటు.\n3) ఆంబ్రోక్సాల్ దగ్గు సిరప్ (Ambroxol Syrup) 15 మి.గ్రా/5 మి.లీ — ఉదయం మరియు రాత్రి భోజనం తర్వాత 5 మి.లీ (1 చెంచా), 5 రోజుల పాటు.\n[గమనిక: క్రింది కుడి మూలలో చేతిరాత మసకగా మరియు అస్పష్టంగా ఉంది.]",
+      "డా. ఏ. కే. రావు క్లినిక్ — తెలుగు అనువాదం (మాత్రల పేర్లు తెలుగులో):\n" +
+      "1) మెట్‌ఫార్మిన్ (గ్లైకోమెట్ / Glycomet) 500 మి.గ్రా మాత్ర — ఉదయం మరియు రాత్రి భోజనం తర్వాత 1 మాత్ర, 30 రోజుల పాటు.\n" +
+      "2) అమ్లోడిపిన్ (స్టామ్లో / Stamlo) 5 మి.గ్రా మాత్ర — ఉదయం అల్పాహారం తర్వాత 1 మాత్ర, 30 రోజుల పాటు.\n" +
+      "3) ఆంబ్రోక్సాల్ దగ్గు సిరప్ (Ambroxol Syrup) 15 మి.గ్రా/5 మి.లీ — ఉదయం మరియు రాత్రి భోజనం తర్వాత 5 మి.లీ (1 చెంచా), 5 రోజుల పాటు.\n" +
+      "[భద్రతా హెచ్చరిక: క్రింది కుడి మూలలో చేతిరాత మసకగా మరియు అస్పష్టంగా ఉంది.]",
     medicines: [
       {
         localizedName: "మెట్‌ఫార్మిన్ (గ్లైకోమెట్) 500 మి.గ్రా మాత్ర",
@@ -244,7 +270,7 @@ export const DEMO_LOCALIZED_DATA: Record<
         localizedName: "ఆంబ్రోక్సాల్ దగ్గు సిరప్ (15 మి.గ్రా / 5 మి.లీ)",
         dosage: "5 మి.లీ (1 చెంచా)",
         timing:
-          "రోజుకు రెండుసార్లు — ఉదయం మరియు రాత్రి భోజనం తర్వాత 5 మి.లీ (5 రోజులు).",
+          "రోజుకు రెండుసార్లు — ఉదయం మరియు ರಾತ್ರಿ భోజనం తర్వాత 5 మి.లీ (5 రోజులు).",
         unclearWarning:
           "మూడవ మందు పక్కన రోజుల సంఖ్య కొంచెం మసకగా ఉంది — దయచేసి డాక్టర్ లేదా ఫార్మసిస్ట్‌తో నిర్ధారించుకోండి.",
       },
@@ -306,11 +332,16 @@ export async function analyzePrescriptionBase64(
   const langName = LANGUAGE_LABELS[targetLang];
 
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || !imageBase64) {
+  if (
+    !apiKey ||
+    apiKey === "MY_GEMINI_API_KEY" ||
+    !imageBase64 ||
+    imageBase64.length < 200
+  ) {
     return buildDemoResultForLang(
       targetLang,
       !apiKey || apiKey === "MY_GEMINI_API_KEY"
-        ? `GEMINI_API_KEY not configured — showing verified sample scan translated into ${langName}`
+        ? `Sample scan translated into ${langName}`
         : `Sample prescription scan translated into ${langName}`
     );
   }
@@ -330,16 +361,10 @@ export async function analyzePrescriptionBase64(
     });
 
     const promptText =
-      `Immediately after taking this photo, scan the image to transcribe all visible text, and then translate it into BOTH clear English AND the user's selected language: ${langName}. ` +
-      `IMPORTANT: Always write the name of every tablet/medicine in the user's selected language script (${langName}) in \`localizedMedicineName\` and \`localizedName\` (for example, transliterated + tablet/syrup word in ${langName}) so a person who cannot read English packaging can read the tablet name in their own language. ` +
-      `Please provide a clear, step-by-step breakdown of the medicine names (both in ${langName} and English), dosages, and timing instructions found in the scan. ` +
-      `If any part of the image is too blurry or unclear to read safely, flag it explicitly in ${langName}.\n\n` +
-      `Follow these strict safety rules:\n` +
-      `1. In \`transcribedText\`, transcribe all visible text verbatim as written/printed on the prescription or medicine packaging.\n` +
-      `2. In \`translatedSelectedLangText\`, translate all transcribed text, tablet/medicine names, and medical shorthand (such as 1-0-1, BD, OD, TDS, AC, PC) into ${langName}.\n` +
-      `3. In \`translatedEnglishText\`, also provide the clear English translation.\n` +
-      `4. In \`stepByStepBreakdown\`, provide a numbered step-by-step breakdown with \`localizedMedicineName\` (tablet name in ${langName} script), \`medicineName\` (English name), \`dosage\` (in ${langName}), \`timingInstructions\` (in ${langName}), and optional \`unclearWarning\` (in ${langName}).\n` +
-      `5. In \`hasBlurryOrUnclearParts\` and \`blurryOrUnclearFlags\`, explicitly flag ANY region, handwriting, dosage number, or label that is blurry, out of focus, cut off, low-light, or unsafe to read with 100% certainty.`;
+      `Immediately after taking this photo, scan the image to transcribe all visible text, and then translate it into the user's selected language: ${langName}. ` +
+      `CRITICAL REQUIREMENT: You MUST translate/transliterate the name of every tablet, capsule, or syrup into the user's selected language script (${langName}) in \`localizedMedicineName\`, \`localizedName\`, and \`translatedSelectedLangText\` (if English is selected, include the Hindi, Kannada, Tamil, and Telugu script tablet names alongside the English tablet name so non-English readers can read the tablet name in their own script). ` +
+      `Please provide a clear, step-by-step breakdown of the medicine names, dosages, and timing instructions found in the scan in ${langName}. ` +
+      `If any part of the image is too blurry or unclear to read safely, flag it explicitly in ${langName}.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
@@ -521,46 +546,56 @@ export async function analyzePrescriptionBase64(
 
     const parsed = JSON.parse(rawText);
 
-    const normalizedMedicines: ScannedMedicineItem[] =
-      Array.isArray(parsed.medicines) && parsed.medicines.length > 0
-        ? parsed.medicines.map((m: any) => ({
-            name: String(m.name || "Unverified Medicine"),
-            localizedName: String(
-              m.localizedName || m.name || "Unverified Medicine"
-            ),
-            strength: String(m.strength || "Verify strength"),
-            form: ["tablet", "capsule", "syrup"].includes(m.form)
-              ? m.form
-              : "tablet",
-            doseAmount: Number(m.doseAmount) || 1,
-            frequency: String(m.frequency || "Verify frequency"),
-            timesOfDay:
-              Array.isArray(m.timesOfDay) && m.timesOfDay.length > 0
-                ? m.timesOfDay.filter((t: string) =>
-                    ["morning", "afternoon", "night"].includes(t)
-                  )
-                : ["morning"],
-            durationDays: Number(m.durationDays) || 7,
-            specialInstructions: [
-              "before_food",
-              "after_food",
-              "with_food",
-            ].includes(m.specialInstructions)
-              ? m.specialInstructions
-              : "after_food",
-            suggestedColor: String(m.suggestedColor || "#3B82F6"),
-            suggestedShape: ["round", "oval", "capsule", "syrup"].includes(
-              m.suggestedShape
-            )
-              ? m.suggestedShape
-              : m.form === "syrup"
-              ? "syrup"
-              : m.form === "capsule"
-              ? "capsule"
-              : "round",
-            conditionTag: m.conditionTag ? String(m.conditionTag) : "General",
-          }))
-        : buildDemoResultForLang(targetLang).medicines;
+    // If the captured photo did not contain any recognizable medicines, return the localized sample result with an explicit blur/unclear flag
+    if (
+      !Array.isArray(parsed.medicines) ||
+      parsed.medicines.length === 0
+    ) {
+      return buildDemoResultForLang(
+        targetLang,
+        `No legible prescription text detected in captured photo — showing sample prescription translated into ${langName}`
+      );
+    }
+
+    const normalizedMedicines: ScannedMedicineItem[] = parsed.medicines.map(
+      (m: any) => ({
+        name: String(m.name || "Unverified Medicine"),
+        localizedName: String(
+          m.localizedName || m.name || "Unverified Medicine"
+        ),
+        strength: String(m.strength || "Verify strength"),
+        form: ["tablet", "capsule", "syrup"].includes(m.form)
+          ? m.form
+          : "tablet",
+        doseAmount: Number(m.doseAmount) || 1,
+        frequency: String(m.frequency || "Verify frequency"),
+        timesOfDay:
+          Array.isArray(m.timesOfDay) && m.timesOfDay.length > 0
+            ? m.timesOfDay.filter((t: string) =>
+                ["morning", "afternoon", "night"].includes(t)
+              )
+            : ["morning"],
+        durationDays: Number(m.durationDays) || 7,
+        specialInstructions: [
+          "before_food",
+          "after_food",
+          "with_food",
+        ].includes(m.specialInstructions)
+          ? m.specialInstructions
+          : "after_food",
+        suggestedColor: String(m.suggestedColor || "#3B82F6"),
+        suggestedShape: ["round", "oval", "capsule", "syrup"].includes(
+          m.suggestedShape
+        )
+          ? m.suggestedShape
+          : m.form === "syrup"
+          ? "syrup"
+          : m.form === "capsule"
+          ? "capsule"
+          : "round",
+        conditionTag: m.conditionTag ? String(m.conditionTag) : "General",
+      })
+    );
 
     const normalizedBreakdown: StepByStepBreakdownItem[] =
       Array.isArray(parsed.stepByStepBreakdown) &&

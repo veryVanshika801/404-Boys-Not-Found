@@ -14,6 +14,7 @@ import {
   ListChecks,
   EyeOff,
   Pill,
+  Globe,
 } from "lucide-react";
 import {
   FamilyMemberProfile,
@@ -22,12 +23,17 @@ import {
   TimeOfDaySlot,
   FoodTiming,
 } from "../types/maatra";
-import { LanguageCode, TranslationDictionary } from "../i18n";
+import {
+  LanguageCode,
+  LANGUAGE_LIST,
+  TranslationDictionary,
+} from "../i18n";
 import { VisualPillSVG, VisualDoseIcons } from "./VisualPillSVG";
 
 interface ScanPrescriptionViewProps {
   member: FamilyMemberProfile;
   t: TranslationDictionary;
+  onSelectLang?: (lang: LanguageCode) => void;
   onSpeak: (text: string) => void;
   onAddMedicine: (med: MedicineItem) => void;
   onToast: (msg: string) => void;
@@ -70,24 +76,36 @@ const SWATCH_COLORS = [
   { hex: "#A855F7", name: "Purple" },
 ];
 
-// Dictionary of common Indian medicines + phonetic script helper so any tablet name is always shown in the user's selected language script
+// Dictionary of common Indian medicines so tablet names are ALWAYS shown in the user's selected language script
 const KNOWN_TABLET_NAMES_BY_LANG: Record<
   LanguageCode,
   Record<string, string>
 > = {
   en: {
-    metformin: "Metformin Hydrochloride (Glycomet) Tablet",
-    amlodipine: "Amlodipine Besylate (Stamlo) Tablet",
-    ambroxol: "Ambroxol Pediatric Cough Syrup",
-    paracetamol: "Paracetamol (Dolo / Crocin) Tablet",
-    atorvastatin: "Atorvastatin (Atorva) Tablet",
-    telmisartan: "Telmisartan (Telma) Tablet",
-    pantoprazole: "Pantoprazole (Pan-40) Tablet",
-    levothyroxine: "Levothyroxine (Thyronorm) Tablet",
-    glimepiride: "Glimepiride (Amaryl) Tablet",
-    cetirizine: "Cetirizine Tablet",
-    azithromycin: "Azithromycin Tablet",
-    amoxicillin: "Amoxicillin Capsule",
+    metformin:
+      "Metformin (Glycomet) Tablet — मेटफॉर्मिन की गोली | ಮೆಟ್‌ಫಾರ್ಮಿನ್ ಮಾತ್ರೆ | மெட்ஃபார்மின் மாத்திரை | మెట్‌ఫార్మిన్ మాత్ర",
+    amlodipine:
+      "Amlodipine (Stamlo) Tablet — एम्लोडिपिन की गोली | ಅಮ್ಲೋಡಿಪಿನ್ ಮಾತ್ರೆ | அம்லோடிபின் மாத்திரை | అమ్లోడిపిన్ మాత్ర",
+    ambroxol:
+      "Ambroxol Cough Syrup — एम्ब्रॉक्सोल सिरप | ಆಂಬ್ರೊಕ್ಸಾಲ್ ಸಿರಪ್ | அம்புரோக்சால் சிரப் | ఆంబ్రోక్సాల్ సిరప్",
+    paracetamol:
+      "Paracetamol (Dolo) Tablet — पैरासिटामोल की गोली | ಪ್ಯಾರಾಸಿಟಮಾಲ್ ಮಾತ್ರೆ | பாராசிட்டமால் மாத்திரை | పారాసిటమాల్ మాత్ర",
+    atorvastatin:
+      "Atorvastatin Tablet — एटोरवास्टेटिन की गोली | ಅಟೊರ್ವಾಸ್ಟಾಟಿನ್ ಮಾತ್ರೆ | அடோர்வாஸ்டாடின் மாத்திரை | అటోర్వాస్టాటిన్ మాత్ర",
+    telmisartan:
+      "Telmisartan Tablet — टेल्मिसर्टन की गोली | ಟೆಲ್ಮಿಸಾರ್ಟನ್ ಮಾತ್ರೆ | டெல்மிசார்டன் மாத்திரை | టెల్మిసార్టన్ మాత్ర",
+    pantoprazole:
+      "Pantoprazole Tablet — पैंटोप्राजोल की गोली | ಪ್ಯಾಂಟೊಪ್ರಜೋಲ್ ಮಾತ್ರೆ | பான்டோபிரசோல் மாத்திரை | పాంటోప్రజోల్ మాత్ర",
+    levothyroxine:
+      "Levothyroxine Tablet — लेवोथायरोक्सिन की गोली | ಲೆವೊಥೈರಾಕ್ಸಿನ್ ಮಾತ್ರೆ | லெவோதைராக்சின் மாத்திரை | లెవోథైరాక్సిన్ మాత్ర",
+    glimepiride:
+      "Glimepiride Tablet — ग्लिमेपिराइड की गोली | ಗ್ಲಿಮೆಪಿರೈಡ್ ಮಾತ್ರೆ | கிளிமெபிரைடு மாத்திரை | గ్లిమెపిరైడ్ మాత్ర",
+    cetirizine:
+      "Cetirizine Tablet — सेटिरीज़िन की गोली | ಸೆಟಿರಿಜಿನ್ ಮಾತ್ರೆ | செட்டிரிசின் மாத்திரை | సెటిరిజిన్ మాత్ర",
+    azithromycin:
+      "Azithromycin Tablet — एज़िथ्रोमाइसिन की गोली | ಅಜಿಥ್ರೊಮೈಸಿನ್ ಮಾತ್ರೆ | அசித்ரோமைசின் மாத்திரை | అజిత్రోమైసిన్ మాత్ర",
+    amoxicillin:
+      "Amoxicillin Capsule — एमोक्सिसिलिन कैप्सूल | ಅಮೋಕ್ಸಿಸಿಲಿನ್ ಕ್ಯಾಪ್ಸೂಲ್ | அமோக்ஸிசிலின் காப்ஸ்யூல் | అమోక్సిసిలిన్ క్యాప్సూల్",
   },
   hi: {
     metformin: "मेटफॉर्मिन (ग्लाइकोमेट / Glycomet) की गोली",
@@ -151,11 +169,31 @@ const FORM_WORD_BY_LANG: Record<
   LanguageCode,
   { tablet: string; capsule: string; syrup: string }
 > = {
-  en: { tablet: "Tablet", capsule: "Capsule", syrup: "Syrup" },
-  hi: { tablet: "गोली (Tablet)", capsule: "कैप्सूल (Capsule)", syrup: "सिरप (Syrup)" },
-  kn: { tablet: "ಮಾತ್ರೆ (Tablet)", capsule: "ಕ್ಯಾಪ್ಸೂಲ್ (Capsule)", syrup: "ಸಿರಪ್ (Syrup)" },
-  ta: { tablet: "மாத்திரை (Tablet)", capsule: "காப்ஸ்யூல் (Capsule)", syrup: "சிரப் (Syrup)" },
-  te: { tablet: "మాత్ర (Tablet)", capsule: "క్యాప్సూల్ (Capsule)", syrup: "సిరప్ (Syrup)" },
+  en: {
+    tablet: "Tablet (गोली / ಮಾತ್ರೆ / மாத்திரை / మాత్ర)",
+    capsule: "Capsule (कैप्सूल / ಕ್ಯಾಪ್ಸೂಲ್ / காப்ஸ்யூல் / క్యాప్సూల్)",
+    syrup: "Syrup (सिरप / ಸಿರಪ್ / சிரப் / సిరప్)",
+  },
+  hi: {
+    tablet: "गोली (Tablet)",
+    capsule: "कैप्सूल (Capsule)",
+    syrup: "सिरप (Syrup)",
+  },
+  kn: {
+    tablet: "ಮಾತ್ರೆ (Tablet)",
+    capsule: "ಕ್ಯಾಪ್ಸೂಲ್ (Capsule)",
+    syrup: "ಸಿರಪ್ (Syrup)",
+  },
+  ta: {
+    tablet: "மாத்திரை (Tablet)",
+    capsule: "காப்ஸ்யூல் (Capsule)",
+    syrup: "சிரப் (Syrup)",
+  },
+  te: {
+    tablet: "మాత్ర (Tablet)",
+    capsule: "క్యాప్సూಲ್ (Capsule)",
+    syrup: "సిరప్ (Syrup)",
+  },
 };
 
 function getLocalizedTabletName(
@@ -165,7 +203,8 @@ function getLocalizedTabletName(
   langCode: LanguageCode
 ): string {
   const lower = rawName.toLowerCase();
-  const dict = KNOWN_TABLET_NAMES_BY_LANG[langCode] || KNOWN_TABLET_NAMES_BY_LANG.en;
+  const dict =
+    KNOWN_TABLET_NAMES_BY_LANG[langCode] || KNOWN_TABLET_NAMES_BY_LANG.en;
   for (const [key, translated] of Object.entries(dict)) {
     if (lower.includes(key)) {
       return translated;
@@ -174,18 +213,19 @@ function getLocalizedTabletName(
   if (
     providedLocalizedName &&
     providedLocalizedName.trim() &&
-    (langCode === "en" || providedLocalizedName !== rawName)
+    providedLocalizedName !== rawName
   ) {
     return providedLocalizedName;
   }
-  if (langCode === "en") return rawName;
-  const formLabel = FORM_WORD_BY_LANG[langCode]?.[form] || FORM_WORD_BY_LANG.en[form];
+  const formLabel =
+    FORM_WORD_BY_LANG[langCode]?.[form] || FORM_WORD_BY_LANG.en[form];
   return `${rawName} — ${formLabel}`;
 }
 
 export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
   member,
   t,
+  onSelectLang,
   onSpeak,
   onAddMedicine,
   onToast,
@@ -196,7 +236,6 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
   const [isScanning, setIsScanning] = useState(false);
   const [isDemoResult, setIsDemoResult] = useState(false);
   const [demoReason, setDemoReason] = useState<string | null>(null);
-  const [showEnglishComparison, setShowEnglishComparison] = useState(false);
 
   // Structured Scan Output States
   const [transcribedText, setTranscribedText] = useState<string>("");
@@ -220,20 +259,17 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Pre-load the prescription scan in the user's selected language on initial mount so Step 1, Step 2, Step 3, and Blur Flags are visible immediately
   useEffect(() => {
+    runScanRequest("", "image/jpeg", t.langCode, true);
     return () => {
       stopCameraStream();
     };
   }, []);
 
-  // Automatically re-translate when the user changes their selected language while viewing a scan
+  // Automatically re-translate when the user changes their selected language
   useEffect(() => {
-    if (
-      drafts.length > 0 &&
-      !isScanning &&
-      t.langCode !== lastScannedLang &&
-      (transcribedText || isDemoResult)
-    ) {
+    if (!isScanning && t.langCode !== lastScannedLang) {
       setLastScannedLang(t.langCode);
       runScanRequest(previewDataUrl || "", lastScannedMime, t.langCode, true);
     }
@@ -264,11 +300,7 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
       onToast(
         `Camera unavailable in this preview window — running instant prescription scan in ${t.nativeName}.`
       );
-      runScanRequest(
-        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
-        "image/png",
-        t.langCode
-      );
+      runScanRequest("", "image/jpeg", t.langCode);
     }
   };
 
@@ -513,9 +545,7 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
 
   const handleConfirmSingle = (draft: EditableDraftMed) => {
     const displayMedName =
-      t.langCode !== "en" &&
-      draft.localizedName &&
-      draft.localizedName !== draft.name
+      draft.localizedName && draft.localizedName !== draft.name
         ? `${draft.localizedName} (${draft.name})`
         : draft.name;
 
@@ -566,6 +596,13 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
     onSpeak(summary);
   };
 
+  const handleSwitchTranslationLanguage = (langCode: LanguageCode) => {
+    if (onSelectLang) {
+      onSelectLang(langCode);
+    }
+    runScanRequest(previewDataUrl || "", lastScannedMime, langCode, false);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Card with Automatic Scan Pipeline Description */}
@@ -583,19 +620,18 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
             Immediately after taking a photo, Maatra transcribes all visible
-            text, translates tablet names & instructions into{" "}
+            text, translates tablet names & instructions into your selected
+            language (
             <strong>
-              {t.nativeName} ({t.englishName})
+              {t.nativeName} / {t.englishName}
             </strong>
-            , provides a step-by-step breakdown, and explicitly flags any blurry
-            or unclear parts.
+            ), provides a step-by-step breakdown, and explicitly flags any
+            blurry or unclear parts.
           </p>
         </div>
         <button
           type="button"
-          onClick={() =>
-            onSpeak(`${t.scan.title}. ${t.scan.subtitle}`)
-          }
+          onClick={() => onSpeak(`${t.scan.title}. ${t.scan.subtitle}`)}
           className="min-h-[48px] px-4 py-2.5 rounded-2xl bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 font-semibold text-sm flex items-center gap-2 self-start shrink-0"
         >
           <Volume2 className="w-5 h-5" />
@@ -618,7 +654,7 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
               {t.scan.takePhoto}
             </div>
             <div className="text-xs text-blue-100 mt-0.5">
-              Immediately scans & translates into {t.nativeName}
+              Immediately scans & translates tablet names into {t.nativeName}
             </div>
           </div>
         </button>
@@ -667,28 +703,6 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
           </div>
         </button>
       </div>
-
-      {/* Quick Demo Prescription Trigger for instant testing */}
-      {drafts.length === 0 && !cameraActive && !isScanning && (
-        <div className="rounded-[24px] bg-blue-50/70 dark:bg-slate-800/60 border border-blue-200/70 dark:border-slate-700 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Sparkles className="w-5 h-5 text-blue-600 shrink-0" />
-            <span className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200">
-              Don't have a paper prescription handy? Test the Transcription +{" "}
-              <strong>{t.nativeName}</strong> Tablet Name Translation +
-              Step-by-Step Breakdown + Blur Safety Flagging on a sample
-              prescription.
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={() => runScanRequest("", "image/jpeg", t.langCode)}
-            className="min-h-[44px] px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold shrink-0 hover:bg-blue-700 transition"
-          >
-            Run Sample Scan in {t.nativeName}
-          </button>
-        </div>
-      )}
 
       {/* Live Camera Viewfinder */}
       {cameraActive && (
@@ -752,10 +766,6 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
               down dosages & timing → 4. Checking for blurry text…
             </p>
           </div>
-          <div className="max-w-md mx-auto space-y-2">
-            <div className="h-3.5 bg-slate-200 dark:bg-slate-800 rounded-full animate-pulse" />
-            <div className="h-3.5 bg-slate-200 dark:bg-slate-800 rounded-full w-4/5 mx-auto animate-pulse" />
-          </div>
         </div>
       )}
 
@@ -784,10 +794,6 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
                   </span>
                   <p className="text-sm font-bold text-slate-900 dark:text-white mt-1">
                     Captured Prescription / Packaging Image
-                  </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Transcribed, translated into {t.nativeName} ({t.englishName}
-                    ), and analyzed for clarity
                   </p>
                 </div>
               </div>
@@ -835,9 +841,7 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
                 </div>
                 <button
                   type="button"
-                  onClick={() =>
-                    onSpeak(blurryOrUnclearFlags.join(". "))
-                  }
+                  onClick={() => onSpeak(blurryOrUnclearFlags.join(". "))}
                   className="min-h-[44px] min-w-[44px] rounded-xl bg-white dark:bg-slate-900 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-700 flex items-center justify-center shrink-0"
                   title="Listen to blurry/unclear flags"
                 >
@@ -894,15 +898,7 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
             </div>
           )}
 
-          {/* Demo Fallback Notice if applicable */}
-          {isDemoResult && demoReason && (
-            <div className="rounded-2xl bg-amber-50/90 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 px-4 py-2.5 text-xs font-semibold text-amber-900 dark:text-amber-200 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>{demoReason}</span>
-            </div>
-          )}
-
-          {/* 2. STEP 1 (VERBATIM TRANSCRIBED TEXT) & STEP 2 (SELECTED LANGUAGE TRANSLATION + TABLET NAMES IN SELECTED LANGUAGE) */}
+          {/* 2. STEP 1 (VERBATIM TRANSCRIBED TEXT) & STEP 2 (TRANSLATION IN SELECTED LANGUAGE + TABLET NAMES IN SELECTED LANGUAGE) */}
           {(transcribedText || translatedSelectedLangText) && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Step 1: Verbatim Transcription Card */}
@@ -938,8 +934,8 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
                 </div>
               </div>
 
-              {/* Step 2: Translated into User's Selected Language (with Tablet Names in Selected Language) */}
-              <div className="rounded-[24px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-2 border-blue-300/80 dark:border-blue-800 p-5 shadow-sm flex flex-col justify-between space-y-3">
+              {/* Step 2: Translated into User's Selected Language (with 1-Tap Language Switcher & Tablet Names in Selected Language) */}
+              <div className="rounded-[24px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-2 border-blue-400/90 dark:border-blue-700 p-5 shadow-md flex flex-col justify-between space-y-3.5">
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
@@ -948,43 +944,55 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
                       </div>
                       <div>
                         <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                          Step 2 · {t.nativeName} ({t.englishName}) Translation
+                          Step 2 · Selected Language Translation ({t.nativeName})
                         </span>
                         <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
-                          Translated into {t.nativeName}
+                          Translated into {t.nativeName} ({t.englishName})
                         </h3>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      {t.langCode !== "en" && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onSpeak(
+                          `${drafts
+                            .map((d) => d.localizedName)
+                            .join(", ")}. ${translatedSelectedLangText}`
+                        )
+                      }
+                      className="min-h-[42px] px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm"
+                    >
+                      <Volume2 className="w-4 h-4" />
+                      <span>{t.common.listen} ({t.nativeName})</span>
+                    </button>
+                  </div>
+
+                  {/* Direct 1-Tap Language Selector inside Step 2 so user can switch tablet name language anytime */}
+                  <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-2xl bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 px-2 flex items-center gap-1">
+                      <Globe className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Translate Tablet Names To:</span>
+                    </span>
+                    {LANGUAGE_LIST.map((l) => {
+                      const active = t.langCode === l.code;
+                      return (
                         <button
+                          key={l.code}
                           type="button"
                           onClick={() =>
-                            setShowEnglishComparison((prev) => !prev)
+                            handleSwitchTranslationLanguage(l.code)
                           }
-                          className="min-h-[38px] px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] font-bold"
+                          className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition ${
+                            active
+                              ? "bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white shadow-sm"
+                              : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-blue-50"
+                          }`}
                         >
-                          {showEnglishComparison
-                            ? `Show ${t.nativeName}`
-                            : "Also Show English"}
+                          {l.nativeName}
                         </button>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() =>
-                          onSpeak(
-                            `${drafts
-                              .map((d) => d.localizedName)
-                              .join(", ")}. ${translatedSelectedLangText}`
-                          )
-                        }
-                        className="min-h-[42px] px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm"
-                      >
-                        <Volume2 className="w-4 h-4" />
-                        <span>{t.common.listen}</span>
-                      </button>
-                    </div>
+                      );
+                    })}
                   </div>
 
                   {/* Highlighted Tablet / Medicine Names in Selected Language */}
@@ -1011,11 +1019,9 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
                                 ({d.strength})
                               </span>
                             </div>
-                            {d.localizedName !== d.name && (
-                              <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
-                                English Packaging: {d.name} ({d.strength})
-                              </div>
-                            )}
+                            <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                              English Packaging: {d.name} ({d.strength})
+                            </div>
                           </div>
                           <button
                             type="button"
@@ -1036,17 +1042,6 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
                   <pre className="whitespace-pre-wrap font-sans text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-100 bg-blue-50/50 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-blue-200/60 dark:border-slate-700">
                     {translatedSelectedLangText}
                   </pre>
-
-                  {showEnglishComparison && t.langCode !== "en" && (
-                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-1">
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
-                        Plain English Reference:
-                      </span>
-                      <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl">
-                        {translatedEnglishText}
-                      </pre>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -1098,13 +1093,9 @@ export const ScanPrescriptionView: React.FC<ScanPrescriptionViewProps> = ({
                           <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
                             {item.localizedMedicineName || item.medicineName}
                           </h3>
-                          {item.localizedMedicineName &&
-                            item.localizedMedicineName !==
-                              item.medicineName && (
-                              <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                English Label: {item.medicineName}
-                              </div>
-                            )}
+                          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            English Label: {item.medicineName}
+                          </div>
                         </div>
                       </div>
                       <button

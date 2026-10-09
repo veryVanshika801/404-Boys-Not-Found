@@ -1576,6 +1576,7 @@ export default function App() {
                   <ScanPrescriptionView
                     member={activeMember}
                     t={t}
+                    onSelectLang={setLang}
                     onSpeak={handleSpeak}
                     onAddMedicine={(newMed) => {
                       setMedicines((prev) => [newMed, ...prev]);
